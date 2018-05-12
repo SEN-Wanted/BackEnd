@@ -12,15 +12,15 @@ CORS(APP)
 
 
 @APP.route("/")
-def Home():
+def home():
     '''
         页面之间的跳转交给前端路由负责，后端不用再写大量的路由
     '''
-    return '餐馆信息 : /index 注册信息 : /login 登陆信息 : /login_up 单个店铺点单信息 : host/index/store_name'
+    return '餐馆信息 : /index 注册信息 : /sign_up 登陆信息 : /login 单个店铺点单信息 : host/index/store_name'
 
 
 @APP.route('/index',methods=['GET'])
-def SendStore():
+def send_store():
     '''
     SXT
     这里接入数据库
@@ -42,8 +42,8 @@ def SendStore():
     return json_store_data
 
 
-@APP.route('/login',methods=['GET', 'POST'])
-def Login():
+@APP.route('/sign_up',methods=['GET', 'POST'])
+def sign():
     form = request.form
     mobile = form.get('phone_num', '')
     password = form.get('password', '')
