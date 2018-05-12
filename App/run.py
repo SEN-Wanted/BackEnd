@@ -70,6 +70,49 @@ def sign():
     return "{'status_code':'201', 'user':{user info}}"
 
 
+@APP.route('/login', methods=['GET', 'POST'])
+def login():
+    error = None
+    if request.method == 'POST':
+        phone_num = request.form.get('phone_num')
+        password = request.form.get('password')
+        if valid_login(phone_num, password):
+            # 号码以及密码验证通过
+            return "{'status_code':'201', 'user':{user info}}"
+        else:
+            # 手机号或者密码错误
+            error = "{'status_code':'401','error_message':'Unauthorized'}"
+            return error
+
+def valid_login(phone_num, password):
+    '''
+    SZQ
+    在数据库中查找手机号，不存在则非法，返回无此号码失败信息
+    如果存在手机号，但密码错误，返回密码错误失败信息
+    如果存在该手机号码并且密码正确则返回成功信息
+    '''
+        #查找数据库,手机号无效
+        # if User.query.get(mobile) is not None:
+        #     return False
+        #查找数据库,手机号对应密码错误
+        # if User.query.get(password) is not equal to password:
+        #     return False
+    return True
+
+
+@APP.route('/index/store_name', methods=['GET', 'POST'])
+def store_name():
+    '''
+    SZQ
+    获取单个电铺点单信息，返回定义的json化数据
+    '''
+    json_fd = open('./json_test/foodData.json', 'r', encoding='UTF-8')
+    json_fd_dict = json.load(json_fd)
+    # 使用flask中定义返回的json而不是content：html.text
+    json_fd_str = jsonify(json_fd_dict)
+    
+    return json_fd_str
+
 
 @APP.route('/test', methods=['GET', 'POST'])
 def test():
