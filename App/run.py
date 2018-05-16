@@ -30,6 +30,7 @@ def send_store():
     store_data = {
                     'icon': '/static/images/store_img/sm_pic',
                     'storeName': '',
+                    'storeID': '',
                     'starRating': '',
                     'price': '',
                     'monthlySell': '',
@@ -100,7 +101,7 @@ def valid_login(phone_num, password):
     return True
 
 
-@APP.route('/index/store_name', methods=['GET', 'POST'])
+@APP.route('/index/storeID', methods=['GET', 'POST'])
 def store_name():
     '''
     SZQ
