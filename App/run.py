@@ -1,9 +1,10 @@
+#!/usr/bin/python
 # -*- coding: UTF-8 -*-
-
 from flask import Flask, render_template
 from flask_cors import CORS
 from flask import jsonify 
 from flask import request
+import hashlib
 import json
 
 APP = Flask(__name__)
@@ -15,20 +16,21 @@ CORS(APP)
 def home():
     '''
         页面之间的跳转交给前端路由负责，后端不用再写大量的路由
+        '餐馆信息 : /index 注册信息 : /sign_up 订单详情 : /user/<userID>/orders/<orderID> 登陆信息 : /login 单个店铺点单信息 : host/index/store_name'
     '''
-    return '餐馆信息 : /index 注册信息 : /sign_up 登陆信息 : /login 单个店铺点单信息 : host/index/store_name'
+    return render_template('index.html')
 
 
 @APP.route('/index',methods=['GET'])
 def send_store():
     '''
     SXT
-    这里接入数据库
+    店铺信息api，
     餐馆图像存储在'/static/images/store_img/'目录下
     和前端沟通过后JSON数据返回忽略顺序
     '''
     store_data = {
-                    'icon': '/static/images/store_img/sm_pic',
+                    'icon': '/static/images/store_img/test_store_1.png',
                     'storeName': '',
                     'storeID': '',
                     'starRating': '',
@@ -49,39 +51,82 @@ def sign():
     mobile = form.get('phone', '')
     password = form.get('password', '')
     print mobile
-
     '''
     SXT
-    在数据库中查找手机号，存在则非法，返回失败信息
-    手机号合法和密码合法性前端完成
+    注册api,创建用户，并将用户的信息存入数据库
+    在数据库中查找手机号，存在则非法，返回失败信息（401）
+    餐馆图像存储在'/static/images/user_img/'目录下
+    message和orderlist为空
     '''
-        #查找数据库,手机号无效
-        # if User.query.get(mobile) is not None:
-        #     return "{'status_code':'401','error_message':'Unauthorized'}"
+    status_code = "201"
+    user_data = {
+    'status_code':  status_code,
+    "user" : {
+        "ID" : '15331533',
+        "phone" : mobile,
+        "name" : 'test_c1',
+        "avar": '/static/images/user_img/test_user_1.png',
+        "message" : '',
+        "orderList": ['']
+        }
+    }
+    json_user_data = json.dumps(user_data, ensure_ascii = False, indent = 4, sort_keys=True, separators=(',', ': '))
+    return json_user_data
 
-        #存入数据库
-        # user = User()
-        # user.id = mobile
-        # user.password = MD5(password)
-        # user.payPassword = MD5(pay_password)
-        # db.session.add(user)
-        # db.session.commit()
-        # login_user(user, True)
-    #如果成功
-    #json_user_data = json.dumps(form, ensure_ascii = False, indent = 4, sort_keys=True, separators=(',', ': '))
-    return json.dumps({'status_code':201})
+@APP.route('/user/<userID>/orders/<orderID>',methods=['GET', 'POST'])
+def order_info(userID, orderID):
+    '''
+    SXT
+    订单详情api
+    用户身份和订单信息确认后输出订单详细信息,失败返回（401）
+    '''
+    status_code = '201'
+    order_hash = hashlib.md5(orderID)
+    order_detail = {
+    'status_code' : status_code,
+    'storeName' : 'test_srore_name',
+    'foodList' : [''],
+    'mealFee' : '123',
+    'ServiceFee' : '123',
+    'totalFee' : '123',
+    'Offer' : '123',
+    'paymentMethod' : '1',
+    'Date' : '2017-01-08 17:05:24',
+    'orderNumber' : order_hash.hexdigest()
+    }
+    json_order_data = json.dumps(order_detail, ensure_ascii = False, indent = 4, sort_keys=True, separators=(',', ': '))
+    return json_order_data
 
 
 @APP.route('/login', methods=['GET', 'POST'])
 def login():
+    '''
+    SZQ
+    登陆api
+    '''
     error = None
     if request.method == 'POST':
-        phone_num = request.form.get('phone')
+        mobile = request.form.get('phone')
         password = request.form.get('password')
-        print phone_num
-        if valid_login(phone_num, password):
+        print mobile
+
+        status_code = "201"
+        user_data = {
+        'status_code':  status_code,
+        "user" : {
+            "ID" : '15331533',
+            "phone" : mobile,
+            "name" : 'test_c1',
+            "avar": '/static/images/user_img/test_user_1.png',
+            "message" : '',
+            "orderList": ['']
+            }
+        }
+        json_user_data = json.dumps(user_data, ensure_ascii = False, indent = 4, sort_keys=True, separators=(',', ': '))
+        
+        if valid_login(mobile, password):
             # 号码以及密码验证通过
-            return "{'status_code':'201', 'user':{user info}}"
+            return json_user_data
         else:
             # 手机号或者密码错误
             error = "{'status_code':'401','error_message':'Unauthorized'}"
@@ -103,14 +148,17 @@ def valid_login(phone_num, password):
     return True
 
 
-@APP.route('/index/storeID', methods=['GET', 'POST'])
-def store_name():
+@APP.route('/index/<storeID>', methods=['GET', 'POST'])
+def store_info(storeID):
     '''
     SZQ
     获取单个电铺点单信息，返回定义的json化数据
     '''
+    print storeID
+    path = './json_test/' + storeID + '.json'
     try:
-        json_fd = open('./json_test/foodData.json', 'r', encoding='UTF-8')
+        print path
+        json_fd = open(path, 'r')
     except IOError:
         return "{'status_code':'401','error_message':'404 Not Found'}"
         
