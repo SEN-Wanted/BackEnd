@@ -46,8 +46,9 @@ def send_store():
 @APP.route('/sign_up',methods=['GET', 'POST'])
 def sign():
     form = request.form
-    mobile = form.get('phone_num', '')
+    mobile = form.get('phone', '')
     password = form.get('password', '')
+    print mobile
 
     '''
     SXT
@@ -68,15 +69,16 @@ def sign():
         # login_user(user, True)
     #如果成功
     #json_user_data = json.dumps(form, ensure_ascii = False, indent = 4, sort_keys=True, separators=(',', ': '))
-    return "{'status_code':'201', 'user':{user info}}"
+    return json.dumps({'status_code':201})
 
 
 @APP.route('/login', methods=['GET', 'POST'])
 def login():
     error = None
     if request.method == 'POST':
-        phone_num = request.form.get('phone_num')
+        phone_num = request.form.get('phone')
         password = request.form.get('password')
+        print phone_num
         if valid_login(phone_num, password):
             # 号码以及密码验证通过
             return "{'status_code':'201', 'user':{user info}}"
@@ -107,9 +109,11 @@ def store_name():
     SZQ
     获取单个电铺点单信息，返回定义的json化数据
     '''
-    json_fd = open('./json_test/foodData.json', 'r', encoding='UTF-8')
-    if (!json_fd)
+    try:
+        json_fd = open('./json_test/foodData.json', 'r', encoding='UTF-8')
+    except IOError:
         return "{'status_code':'401','error_message':'404 Not Found'}"
+        
     json_fd_dict = json.load(json_fd)
     # 使用flask中定义返回的json而不是content：html.text
     json_fd_str = jsonify(json_fd_dict)
@@ -121,7 +125,6 @@ def store_name():
 def test():
     ''' 这个API用来测试跨域 '''
     return 'success'
-
 
 if __name__ == '__main__':
     '''
