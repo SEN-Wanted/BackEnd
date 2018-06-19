@@ -1,13 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="2c896954-cfe7-4678-8624-14b54117c856" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/App/createdb.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/App/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/App/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/App/config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/run.py" beforeDir="false" afterPath="$PROJECT_DIR$/App/run.py" afterDir="false" />
-    </list>
+    <list default="true" id="2c896954-cfe7-4678-8624-14b54117c856" name="Default" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -288,14 +282,14 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="-7" width="1550" height="838" extended-state="7" />
+    <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
     <layout>
       <window_info content_ui="combo" id="Project" order="1" visible="true" weight="0.24966975" />
       <window_info anchor="bottom" id="TODO" order="10" weight="0.07132667" />
       <window_info anchor="bottom" id="Event Log" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Version Control" order="3" weight="0.32952926" />
       <window_info anchor="bottom" id="Python Console" order="0" weight="0.32952926" />
-      <window_info active="true" anchor="bottom" id="Run" order="6" visible="true" weight="0.15977176" />
+      <window_info active="true" anchor="bottom" id="Run" order="6" visible="true" weight="0.13694721" />
       <window_info id="Structure" order="2" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Terminal" order="1" weight="0.2681883" />
       <window_info id="Favorites" order="0" side_tool="true" />
