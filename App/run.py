@@ -108,12 +108,11 @@ def store_name():
     获取单个电铺点单信息，返回定义的json化数据
     '''
     json_fd = open('./json_test/foodData.json', 'r', encoding='UTF-8')
-    if (!json_fd)
+    if (not json_fd) :
         return "{'status_code':'401','error_message':'404 Not Found'}"
     json_fd_dict = json.load(json_fd)
     # 使用flask中定义返回的json而不是content：html.text
     json_fd_str = jsonify(json_fd_dict)
-    
     return json_fd_str
 
 
