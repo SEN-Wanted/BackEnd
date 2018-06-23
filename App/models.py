@@ -32,7 +32,7 @@ class Store(db.Model):
     description = db.Column(db.Text, doc='店铺介绍', default='暂无介绍', nullable=False)
     rating = db.Column(db.Float, doc='评分', nullable=True)
     ratingNum = db.Column(db.SmallInteger, doc='评分人数', default=0)
-    img = db.Column(db.String(40), doc='店铺头像路径')
+    title = db.Column(db.String(32), doc='分类', nullable=False)
 
     recommends = db.relationship('Recommend', backref='stores', cascade='all', lazy='dynamic')
     dishes = db.relationship('Dishes', backref='stores', cascade='all', lazy='dynamic')
@@ -47,6 +47,9 @@ class Dishes(db.Model):
     id = db.Column(db.String(32), primary_key=True)
     dishName = db.Column(db.String(32), doc='菜名', nullable=False)
     dishPrice = db.Column(db.Float, doc='价格', nullable=False)
+    title = db.Column(db.String(32), doc='分类',nullable=False)
+    monthlySale = db.Column(db.Integer, doc='月售', nullable=False)
+    like = db.Column(db.Integer, doc='赞', nullable=False)
     storeId = db.Column(db.String(32), db.ForeignKey('stores.id'), nullable=False)
 
     orders = db.relationship('Order', backref='dishes', cascade='all', lazy='dynamic')
