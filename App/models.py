@@ -28,7 +28,7 @@ class Store(db.Model):
     id = db.Column(db.String(32), primary_key=True)
     storeName = db.Column(db.String(32), doc='店铺名称', nullable=False, unique=True)
     location = db.Column(db.String(32), doc='位置', nullable=False)
-    isDiscount = db.Column(db.Boolean, doc='店铺名称', nullable=True)
+    isDiscount = db.Column(db.Boolean, doc='是否折扣', nullable=True)
     description = db.Column(db.Text, doc='店铺介绍', default='暂无介绍', nullable=False)
     rating = db.Column(db.Float, doc='评分', nullable=True)
     ratingNum = db.Column(db.SmallInteger, doc='评分人数', default=0)
@@ -45,7 +45,7 @@ class Dishes(db.Model):
     __tablename__ = 'dishes'
     __table_args__ = {'mysql_engine': 'InnoDB'}  # 支持事务操作和外键
     id = db.Column(db.String(32), primary_key=True)
-    dishName = db.Column(db.Integer, doc='菜名', nullable=False)
+    dishName = db.Column(db.String(32), doc='菜名', nullable=False)
     dishPrice = db.Column(db.Float, doc='价格', nullable=False)
     storeId = db.Column(db.String(32), db.ForeignKey('stores.id'), nullable=False)
 
