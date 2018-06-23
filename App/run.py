@@ -175,15 +175,13 @@ def sign():
 @APP.route('/login', methods=['GET', 'POST'])
 def login():
     '''
-        SZQ
-        登陆api
-        '''
+    SZQ
+    登陆api
+    '''
     error = None
     if request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')
-
-        # json_user_data = json.dumps(user_data, ensure_ascii=False, indent=4, sort_keys=True, separators=(',', ': '))
         if verify_password(username, password):
             # 号码以及密码验证通过
             pass
@@ -191,7 +189,6 @@ def login():
             # 手机号或者密码错误
             error = jsonify({'status_code':'401','error_message':'Unauthorized'})
             return error
-
         token = g.user.generate_auth_token(600)
         status_code = "201"
         user_data = {
@@ -212,10 +209,8 @@ def login():
 
 def valid_sign_up(username, password):
     if username is None or password is None:
-        # abort(400)    # missing arguments
         return False
     if User.query.filter_by(username=username).first() is not None:
-        # abort(400)    # existing user
         return False
     return True
 def valid_login(username, password):
@@ -232,10 +227,8 @@ def valid_login(username, password):
     # if User.query.get(password) is not equal to password:
     #     return False
     if username is None or password is None:
-        # abort(400)    # missing arguments
         return False
     if User.query.filter_by(username=username).first() is not None:
-        # abort(400)    # existing user
         return True
     return False
 
@@ -286,7 +279,6 @@ def order_info_brief(userID):
     user = User.verify_auth_token(token)
     if not user:
         return jsonify({'status_code': '401', 'error_message': 'Unauthorized'})
-
     if request.method == 'GET':
         path = './json_test/' + userID + '_brief_order.json'
         try:
@@ -299,9 +291,12 @@ def order_info_brief(userID):
         json_order_data = jsonify(json_od_dict)
         return json_order_data
     if request.method == 'POST':
+        path = './json_test/' + userID + '_brief_order.json'
         new_order = request.get_data()
+        json_od = open(path, 'r')
         print new_order
         new_order = jsonify(new_order)
+
         return new_order
 
 
@@ -342,8 +337,8 @@ if __name__ == '__main__':
     '''
     if not os.path.exists('db.sqlite'):
         db.create_all()
-    # APP.run(debug=True, host='0.0.0.0')
-    APP.run(debug=True)
+    APP.run(debug=True, host='0.0.0.0')
+    # APP.run(debug=True)
 
 # @APP.route('/user/<userID>/orders/<orderID>', methods=['GET', 'POST'])
 # def order_info_detail(userID, orderID):

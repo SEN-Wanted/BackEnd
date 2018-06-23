@@ -1,1 +1,4 @@
 # con sth
+SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:1234@localhost:3306/mydb'
+SQLALCHEMY_TRACK_MODIFICATIONS = True
+SQLALCHEMY_COMMIT_ON_TEARDOWN = True
