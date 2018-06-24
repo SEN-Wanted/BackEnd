@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime, date
-from App import db
+from app import app
+from app import db
+from passlib.apps import custom_app_context as pwd_context
+from itsdangerous import (TimedJSONWebSignatureSerializer
+                          as Serializer, BadSignature, SignatureExpired)
 
 
 class User(db.Model):
@@ -20,6 +24,28 @@ class User(db.Model):
     favorites = db.relationship('Favorite', backref='users', cascade='all', lazy='dynamic')
     comments = db.relationship('Comment', backref='users', cascade='all', lazy='dynamic')
 
+    def hash_password(self, password):
+        self.password_hash = pwd_context.encrypt(password)
+
+    def verify_password(self, password):
+        return pwd_context.verify(password, self.password_hash)
+
+    def generate_auth_token(self, expiration=600):
+        s = Serializer(app.config['SECRET_KEY'], expires_in=expiration)
+        return s.dumps({'id': self.id})
+
+    @staticmethod
+    def verify_auth_token(token):
+        s = Serializer(app.config['SECRET_KEY'])
+        try:
+            data = s.loads(token)
+        except SignatureExpired:
+            return None  # valid token, but expired
+        except BadSignature:
+            return None  # invalid token
+        user = User.query.get(data['id'])
+        return user
+
 
 class Store(db.Model):
     """店铺"""
@@ -28,11 +54,11 @@ class Store(db.Model):
     id = db.Column(db.String(32), primary_key=True)
     storeName = db.Column(db.String(32), doc='店铺名称', nullable=False, unique=True)
     location = db.Column(db.String(32), doc='位置', nullable=False)
-    isDiscount = db.Column(db.Boolean, doc='是否折扣', nullable=True)
+    isDiscount = db.Column(db.Boolean, doc='店铺名称', nullable=True)
     description = db.Column(db.Text, doc='店铺介绍', default='暂无介绍', nullable=False)
     rating = db.Column(db.Float, doc='评分', nullable=True)
     ratingNum = db.Column(db.SmallInteger, doc='评分人数', default=0)
-    title = db.Column(db.String(32), doc='分类', nullable=False)
+#    img = db.Column(db.String(40), doc='店铺头像路径')
 
     recommends = db.relationship('Recommend', backref='stores', cascade='all', lazy='dynamic')
     dishes = db.relationship('Dishes', backref='stores', cascade='all', lazy='dynamic')
@@ -45,11 +71,9 @@ class Dishes(db.Model):
     __tablename__ = 'dishes'
     __table_args__ = {'mysql_engine': 'InnoDB'}  # 支持事务操作和外键
     id = db.Column(db.String(32), primary_key=True)
-    dishName = db.Column(db.String(32), doc='菜名', nullable=False)
+    dishName = db.Column(db.Integer, doc='菜名', nullable=False)
     dishPrice = db.Column(db.Float, doc='价格', nullable=False)
-    title = db.Column(db.String(32), doc='分类',nullable=False)
-    monthlySale = db.Column(db.Integer, doc='月售', nullable=False)
-    like = db.Column(db.Integer, doc='赞', nullable=False)
+    monthlySale = db.Column(db.Integer, doc = '月瘦', nullable=False)
     storeId = db.Column(db.String(32), db.ForeignKey('stores.id'), nullable=False)
 
     orders = db.relationship('Order', backref='dishes', cascade='all', lazy='dynamic')
@@ -109,10 +133,6 @@ class Comment(db.Model):
     storeId = db.Column(db.String(32), db.ForeignKey('stores.id'), nullable=False)
     content = db.Column(db.Text, nullable=False, doc='评论内容')
     rating = db.Column(db.SmallInteger, nullable=False, doc='店铺评分')
-
-
-db.create_all()
-
 
 
 
