@@ -29,7 +29,6 @@ def sign():
     password = request.form.get('password')
 
     user_info1 = User.query.filter_by(id = username).first()
-    print user_info1
 
     if valid_sign_up(username, password):
         # default user
