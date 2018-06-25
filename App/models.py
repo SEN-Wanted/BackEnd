@@ -73,7 +73,9 @@ class Dishes(db.Model):
     id = db.Column(db.String(32), primary_key=True)
     dishName = db.Column(db.Integer, doc='菜名', nullable=False)
     dishPrice = db.Column(db.Float, doc='价格', nullable=False)
-    monthlySale = db.Column(db.Integer, doc = '月瘦', nullable=False)
+    monthlySale = db.Column(db.Integer, doc = '月售', nullable=False)
+    like = db.Column(db.Integer, doc = '点赞', nullable=False)
+    title = db.Column(db.String(32), doc = '分类', nullable=False)
     storeId = db.Column(db.String(32), db.ForeignKey('stores.id'), nullable=False)
 
     orders = db.relationship('Order', backref='dishes', cascade='all', lazy='dynamic')
