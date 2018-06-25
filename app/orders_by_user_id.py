@@ -9,8 +9,8 @@ orders_by_user_id = Blueprint('orders_by_user_id', __name__)
 def order_info_brief(userID):
     '''
     SZQ
-    订单详情api
-    用户身份和订单信息确认后输出订单详细信息,失败返回（401）
+    用户订单详情
+    用户身份确认后输出订单详细信息,失败返回（401）
     '''
     token = request.headers['accesstoken']
     user = User.verify_auth_token(token)
