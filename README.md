@@ -4,7 +4,7 @@
 
 ```
 Appserver/
-├── App
+├── app
 │   ├── static/      # 静态资源文件夹
 │   ├── templates/   # 模板文件夹
 │   ├── json_test/   # 用来存放测试文件
