@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from flask import Blueprint, render_template, redirect, request, jsonify
+from flask import Blueprint, render_template, redirect, request, jsonify, g
 from . import db, auth
 from .models import User
 user_info = Blueprint('user',__name__)
@@ -40,11 +40,12 @@ def sign():
     else:
         error = jsonify({'status_code': '401', 'error_message': 'Unauthorized'})
         return error
-
+    verify_password(username, password)
+    token = g.user.generate_auth_token(600)
     status_code = "201"
     user_data = {
        'status_code': status_code,
-       'token': 'nooooop',
+       'token': token,
        'duration': 600,
        "user": {
            "ID": user1.id,
