@@ -19,18 +19,20 @@ def order_info_detail(userID, orderID):
             for per_user_order in Order.query.order_by(Order.id):
                 if (per_user_order.id == orderID):
                     dishes = Dishes.query.filter_by(id = per_user_order.dishesId).first()
-                    store_name = Store.query.filter_by(id = dishes.storeId).first()
+                    store_name = Store.query.filter_by(id = dishes.storeId).first().store_name
                     Food_detail = {
                         "dishName": dishes.dishName,
                         "price": dishes.dishPrice,
                         "number": 'undefined'
                     }
                     listFood.append(Food_detail)
+                else:
+                    return jsonify({'status_code': '401', 'error_message': 'No Orders'})
             status_code = '201'
             order_hash = hashlib.md5(orderID)
             order_detail = {
                 'status_code': status_code,
-                'storeName': store_name.storeName,
+                'storeName': store_name,
                 'foodList': listFood,
                 'mealFee': 'undefined',
                 'ServiceFee': 'undefined',
@@ -43,7 +45,7 @@ def order_info_detail(userID, orderID):
             json_order_data = jsonify(order_detail)
             return json_order_data
         else:
-            return jsonify({'status_code': '401', 'error_message': 'Unauthorized'})
+            return jsonify({'status_code': '401', 'error_message': 'No User'})
 
 def vaild_order(userID, OrderID):
     if userID is None or OrderID is None:
