@@ -1,9 +1,20 @@
 # -*- coding: utf-8 -*-
 from flask import Blueprint, render_template, redirect, request, jsonify
-from app import db
+from . import db, auth
 from .models import User
-
 user_info = Blueprint('user',__name__)
+
+@auth.verify_password
+def verify_password(username_or_token, password):
+    # first try to authenticate by token
+    user = User.verify_auth_token(username_or_token)
+    if not user:
+        # try to authenticate with username/password
+        user = User.query.filter_by(id=username_or_token).first()
+        if not user or not user.verify_password(password):
+            return False
+    g.user = user
+    return True
 
 @user_info.route('/sign_up', methods=['GET', 'POST'])
 def sign():
@@ -17,24 +28,18 @@ def sign():
     username = request.form.get('username')
     password = request.form.get('password')
 
-    ## test initial
-    username = '13719335348'
-    password = '12345678'
-    
     user_info1 = User.query.filter_by(id = username).first()
     print user_info1
 
     if valid_sign_up(username, password):
         # default user
-        user1 = User(id = username, password = password, payPassword = password, money = 0, isAdmin = 0)
+        user1 = User(id = username, nickname= username, password_hash = password, payPassword = password, money = 0, isAdmin = 0)
+        user1.hash_password(password)
         db.session.add(user1)
         db.session.commit()
     else:
         error = jsonify({'status_code': '401', 'error_message': 'Unauthorized'})
         return error
-
-    # verify_password(username, password)
-    # token = g.user.generate_auth_token(600)
 
     status_code = "201"
     user_data = {
@@ -52,7 +57,6 @@ def sign():
     }
     json_user_data = jsonify(user_data)
     return json_user_data
-    return 'success'
 
 def valid_sign_up(username, password):
     if username is None or password is None:
