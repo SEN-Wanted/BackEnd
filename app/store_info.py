@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from flask import Blueprint, render_template, redirect, request, jsonify
-from app import db
+from . import db
 from .models import Store
 
 store_info = Blueprint('store',__name__)

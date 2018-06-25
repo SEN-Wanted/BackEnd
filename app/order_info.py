@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from flask import Blueprint, render_template, redirect, request, jsonify
 import hashlib
-from app import db
+from . import db
 from .models import Order, Dishes, Store
 
 order_info = Blueprint('order', __name__)
