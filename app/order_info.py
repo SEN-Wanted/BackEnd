@@ -16,24 +16,21 @@ def order_info_detail(userID, orderID):
     listFood = []
     if request.method == 'GET':
         if vaild_order(userID, orderID):
-            for per_user_order in Order.query.order_by(Order.username):
-                dishes = Dishes.query.filter_by(id = per_user_order.dishesId).first()
-                store_name = Store.query.filter_by(id = dishes.storeId).first().storeName
-                Food_detail = {
-                    "icon": "none",
-                    "dishName": dishes.dishName,
-                    "storeid": dishes.storeId,
-                    "price": dishes.dishPrice,
-                    "monthlySell": dishes.monthlySale,
-                    "like": dishes.like,
-                    "title": dishes.title
-                }
-                listFood.append(Food_detail)
+            for per_user_order in Order.query.order_by(Order.id):
+                if (per_user_order.id == orderID):
+                    dishes = Dishes.query.filter_by(id = per_user_order.dishesId).first()
+                    store_name = Store.query.filter_by(id = dishes.storeId).first()
+                    Food_detail = {
+                        "dishName": dishes.dishName,
+                        "price": dishes.dishPrice,
+                        "number": 'undefined'
+                    }
+                    listFood.append(Food_detail)
             status_code = '201'
             order_hash = hashlib.md5(orderID)
             order_detail = {
                 'status_code': status_code,
-                'storeName': store_name,
+                'storeName': store_name.storeName,
                 'foodList': listFood,
                 'mealFee': 'undefined',
                 'ServiceFee': 'undefined',

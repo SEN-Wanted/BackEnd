@@ -1,5 +1,5 @@
 # -*- coding: UTF-8 -*-
-from App import app
+from app import app
 if __name__ == '__main__':
     '''
     开启 debug模式
