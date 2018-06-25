@@ -11,20 +11,26 @@ def send_store():
     SXT
     店铺信息api，
     餐馆图像存储在'/static/images/store_img/'目录下
-    和前端沟通过后JSON数据返回忽略顺序
+    20180625 pro:数据库构建不完整
     '''
-    store_info1 = Store.query.filter_by(id = '1').first()
+    store_data_temp = []
+    for store_info1 in Store.query.order_by(Store.id):
+        print store_info1.storeName
+        store_data1 = {
+            'icon': '/static/images/store_img/store_id' + store_info1.id + '/store.png',
+            'storeName': store_info1.storeName,
+            'storeID': store_info1.id,
+            'starRating': store_info1.rating,
+            'price': '',
+            'monthlySell': store_info1.ratingNum,
+            'distance': store_info1.location,
+            'isDiscount': store_info1.isDiscount,
+            'DiscountNumber': '',
+            'isAppOffer': ''
+        }
+        store_data_temp.append(store_data1)
     store_data = {
-        'icon': '/static/images/store_img/store_id' + store_info1.id + '/store.png',
-        'storeName': store_info1.storeName,
-        'storeID': store_info1.id,
-        'starRating': store_info1.rating,
-        'price': '',
-        'monthlySell': store_info1.ratingNum,
-        'distance': store_info1.location,
-        'isDiscount': store_info1.isDiscount,
-        'DiscountNumber': '',
-        'isAppOffer': ''
+        'listStoreData':store_data_temp
     }
     json_store_data = jsonify(store_data)
     return json_store_data
