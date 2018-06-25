@@ -73,30 +73,3 @@ def home():
 def test():
     ''' 这个API用来测试跨域 '''
     return 'success'
-
-
-# @app.route('/user/<userID>/orders/<orderID>', methods=['GET', 'POST'])
-# def order_info_detail(userID, orderID):
-#     '''
-#     SXT
-#     订单详情api
-#     用户身份和订单信息确认后输出订单详细信息,失败返回（401）
-#     '''
-#     if request.method == 'GET':
-#         status_code = '201'
-#         order_hash = hashlib.md5(orderID)
-#         order_detail = {
-#             'status_code': status_code,
-#             'storeName': 'test_srore_name',
-#             'foodList': [''],
-#             'mealFee': '123',
-#             'ServiceFee': '123',
-#             'totalFee': '123',
-#             'Offer': '123',
-#             'paymentMethod': '1',
-#             'Date': '2017-01-08 17:05:24',
-#             'orderNumber': order_hash.hexdigest()
-#         }
-#         # json_order_data = json.dumps(order_detail, ensure_ascii=False, indent=4, sort_keys=True, separators=(',', ': '))
-#         json_order_data = jsonify(order_detail)
-#         return json_order_data
