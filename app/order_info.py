@@ -13,10 +13,14 @@ def order_info_detail(userID, orderID):
     订单详情api
     用户身份和订单信息确认后输出订单详细信息,失败返回（401）
     '''
-    token = request.headers['accesstoken']
-    user = User.verify_auth_token(token)
-    if not user:
-        return jsonify({'status_code': '401', 'error_message': 'Unauthorized'})
+#    token = request.headers['accesstoken']
+#    user = User.verify_auth_token(token)
+#    if not user:
+#        return jsonify({'status_code': '401', 'error_message': 'Unauthorized'})
+
+    rating = request.form.get('rating')
+    
+    rating = 0
 
     listFood = []
     store_name = ""
@@ -24,6 +28,9 @@ def order_info_detail(userID, orderID):
         if vaild_order(userID, orderID):
             for per_user_order in Order.query.order_by(Order.id):
                 if (per_user_order.id == orderID):
+                    # 由于数据库中没有rating这个数据，测试时暂时把status看作rating测试
+                    per_user_order.status = rating
+                    db.session.commit()
                     dishes = Dishes.query.filter_by(id = per_user_order.dishesId).first()
                     store_name = Store.query.filter_by(id = dishes.storeId).first().storeName
                     Food_detail = {
@@ -47,7 +54,8 @@ def order_info_detail(userID, orderID):
                     'Offer': 'undefined',
                     'paymentMethod': 'undefined',
                     'Date': per_user_order.createTime,
-                    'orderNumber': order_hash.hexdigest()
+                    'orderNumber': order_hash.hexdigest(),
+                    'rating' : rating
                 }
                 json_order_data = jsonify(order_detail)
                 return json_order_data
