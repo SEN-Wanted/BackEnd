@@ -30,7 +30,7 @@ def sign():
 
     if valid_sign_up(username, password):
         # default user
-        user1 = User(id=username, password_hash = password, payPassword = password, money = 0, isAdmin = 0)
+        user1 = User(id = username, password_hash = password, payPassword = password, money = 0, isAdmin = 0)
         user1.hash_password(password)
         db.session.add(user1)
         db.session.commit()
@@ -45,7 +45,6 @@ def sign():
        'token': token,
        'duration': 600,
        "user": {
-           "ID": user1.id,
            "username": user1.id,
            "name": user1.nickname,
            "avar": '/static/images/user_img/test_user_1.png',
