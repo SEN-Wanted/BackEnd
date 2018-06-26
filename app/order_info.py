@@ -17,37 +17,40 @@ def order_info_detail(userID, orderID):
     user = User.verify_auth_token(token)
     if not user:
         return jsonify({'status_code': '401', 'error_message': 'Unauthorized'})
+
     listFood = []
+    store_name = ""
     if request.method == 'GET':
         if vaild_order(userID, orderID):
             for per_user_order in Order.query.order_by(Order.id):
                 if (per_user_order.id == orderID):
                     dishes = Dishes.query.filter_by(id = per_user_order.dishesId).first()
-                    store_name = Store.query.filter_by(id = dishes.storeId).first().store_name
+                    store_name = Store.query.filter_by(id = dishes.storeId).first().storeName
                     Food_detail = {
                         "dishName": dishes.dishName,
                         "price": dishes.dishPrice,
                         "number": 'undefined'
                     }
                     listFood.append(Food_detail)
-                else:
-                    return jsonify({'status_code': '401', 'error_message': 'No Orders'})
-            status_code = '201'
-            order_hash = hashlib.md5(orderID)
-            order_detail = {
-                'status_code': status_code,
-                'storeName': store_name,
-                'foodList': listFood,
-                'mealFee': 'undefined',
-                'ServiceFee': 'undefined',
-                'totalFee': per_user_order.totalPrice,
-                'Offer': 'undefined',
-                'paymentMethod': 'undefined',
-                'Date': per_user_order.createTime,
-                'orderNumber': order_hash.hexdigest()
-            }
-            json_order_data = jsonify(order_detail)
-            return json_order_data
+            if store_name == "":
+                return jsonify({'status_code': '401', 'error_message': 'No Orders'})
+            else:
+                status_code = '201'
+                order_hash = hashlib.md5(orderID)
+                order_detail = {
+                    'status_code': status_code,
+                    'storeName': store_name,
+                    'foodList': listFood,
+                    'mealFee': 'undefined',
+                    'ServiceFee': 'undefined',
+                    'totalFee': per_user_order.totalPrice,
+                    'Offer': 'undefined',
+                    'paymentMethod': 'undefined',
+                    'Date': per_user_order.createTime,
+                    'orderNumber': order_hash.hexdigest()
+                }
+                json_order_data = jsonify(order_detail)
+                return json_order_data
         else:
             return jsonify({'status_code': '401', 'error_message': 'No User'})
 
