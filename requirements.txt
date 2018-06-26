@@ -1,1 +1,8 @@
 Flask==0.12.1
+flask_sqlalchemy
+sqlalchemy.ext.declarative
+datetime
+passlib.apps
+itsdangerous
+hashlib
+flask_httpauth
