@@ -11,7 +11,8 @@ class User(db.Model):
     """用户"""
     __tablename__ = 'users'
     __table_args__ = {'mysql_engine': 'InnoDB'}  # 支持事务操作和外键
-    id = db.Column(db.Integer, primary_key=True)
+    # id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.String(32), primary_key=True)
     nickname = db.Column(db.String(20), doc='昵称', default='Wanted User', nullable=False)
     password_hash = db.Column(db.String(128), doc='密码', nullable=False)
     payPassword = db.Column(db.String(32), doc='支付密码', nullable=False)
@@ -20,9 +21,9 @@ class User(db.Model):
     isAdmin = db.Column(db.Boolean, doc='是否管理员', default=False)
 
     orders = db.relationship('Order', backref='users', cascade='all', lazy='dynamic')
-    coupons = db.relationship('Coupon', backref='users', cascade='all', lazy='dynamic')
-    favorites = db.relationship('Favorite', backref='users', cascade='all', lazy='dynamic')
-    comments = db.relationship('Comment', backref='users', cascade='all', lazy='dynamic')
+    # coupons = db.relationship('Coupon', backref='users', cascade='all', lazy='dynamic')
+    # favorites = db.relationship('Favorite', backref='users', cascade='all', lazy='dynamic')
+    # comments = db.relationship('Comment', backref='users', cascade='all', lazy='dynamic')
 
     def hash_password(self, password):
         self.password_hash = pwd_context.encrypt(password)
@@ -65,30 +66,29 @@ class Store(db.Model):
     title = db.Column(db.String(32), doc='种类', nullable=False)
     img = db.Column(db.String(40), doc='店铺头像路径')
 
-    recommends = db.relationship('Recommend', backref='stores', cascade='all', lazy='dynamic')
+    # recommends = db.relationship('Recommend', backref='stores', cascade='all', lazy='dynamic')
     dishes = db.relationship('Dishes', backref='stores', cascade='all', lazy='dynamic')
-    favorites = db.relationship('Favorite', backref='stores', cascade='all', lazy='dynamic')
-    comments = db.relationship('Comment', backref='stores', cascade='all', lazy='dynamic')
+    # favorites = db.relationship('Favorite', backref='stores', cascade='all', lazy='dynamic')
+    # comments = db.relationship('Comment', backref='stores', cascade='all', lazy='dynamic')
 
 
 class Dishes(db.Model):
     """菜品"""
     __tablename__ = 'dishes'
     __table_args__ = {'mysql_engine': 'InnoDB'}  # 支持事务操作和外键
-    id = db.Column(db.String(32), primary_key=True)
+    # id = db.Column(db.String(32), primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     dishName = db.Column(db.String(32), doc='菜名', nullable=False)
     dishPrice = db.Column(db.Float, doc='价格', nullable=False)
     monthlySale = db.Column(db.Integer, doc='月售', nullable=False)
     storeId = db.Column(db.String(32), db.ForeignKey('stores.id'), nullable=False)
     img = db.Column(db.String(40), doc='店铺头像')
 
-    # orders = db.relationship('Order', backref='dishes', cascade='all', lazy='dynamic')
 
-
-class Recommend(db.Model):
-    __tablename__ = 'recommendation'
-    __table_args__ = {'mysql_engine': 'InnoDB'}  # 支持事务操作和外键
-    storeId = db.Column(db.String(32), db.ForeignKey('stores.id'), primary_key=True, nullable=False)
+# class Recommend(db.Model):
+#     __tablename__ = 'recommendation'
+#     __table_args__ = {'mysql_engine': 'InnoDB'}  # 支持事务操作和外键
+#     storeId = db.Column(db.String(32), db.ForeignKey('stores.id'), primary_key=True, nullable=False)
 
 
 class Order(db.Model):
@@ -96,8 +96,9 @@ class Order(db.Model):
     __tablename__ = 'orders'
     __table_args__ = {'mysql_engine': 'InnoDB'}  # 支持事务操作和外键
 
-    id = db.Column(db.String(32), primary_key=True)
-#   dishesId = db.Column(db.String(32), db.ForeignKey('dishes.id'), nullable=False)
+    # id = db.Column(db.String(128), primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
+    #   dishesId = db.Column(db.String(32), db.ForeignKey('dishes.id'), nullable=False)
     username = db.Column(db.String(32), db.ForeignKey('users.id'), nullable=False)
     storeName = db.Column(db.String(32), doc='店铺名', nullable=False)
     createTime = db.Column(db.DateTime, doc='创建时间', nullable=False)
@@ -115,44 +116,44 @@ class food_list(db.Model):
     """订单"""
     __tablename__ = 'food_list'
     __table_args__ = {'mysql_engine': 'InnoDB'}  # 支持事务操作和外键
-    id = db.Column(db.String(32), primary_key=True)
+    # id = db.Column(db.String(128), primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
 #   dishId = db.Column(db.String(32), db.ForeignKey('dishes.id'), nullable=False)
     dishName = db.Column(db.String(32), doc='菜名', nullable=False)
     number = db.Column(db.Integer, doc='数量', nullable=False)
     price = db.Column(db.Float, doc='价格', nullable=False)
     orderID = db.Column(db.String(32), db.ForeignKey('orders.id'), nullable=False)
 
-
-class Coupon(db.Model):
-    """优惠券"""
-    __tablename__ = 'coupons'
-    __table_args__ = {'mysql_engine': 'InnoDB'}  # 支持事务操作和外键
-
-    id = db.Column(db.String(32), primary_key=True)
-    discount = db.Column(db.SmallInteger, doc='折扣', nullable=False, default=5)
-    condition = db.Column(db.SmallInteger, doc='满多少元可用', default=30, nullable=False)
-    username = db.Column(db.String(32), db.ForeignKey('users.id'), nullable=False, doc='手机号码')
-    expiredTime = db.Column(db.Date, doc='过期时间', nullable=False)
-    status = db.Column(db.Boolean, doc='状态(0:未使用,1:已使用)', default=0, nullable=False)
-
-
-class Favorite(db.Model):
-    """收藏"""
-    __tablename__ = 'favorites'
-    __table_args__ = {'mysql_engine': 'InnoDB'}  # 支持事务操作和外键
-
-    id = db.Column(db.String(32), primary_key=True)
-    username = db.Column(db.String(32), db.ForeignKey('users.id'), nullable=False, doc='手机号码')
-    storeId = db.Column(db.String(32), db.ForeignKey('stores.id'), nullable=False)
-
-
-class Comment(db.Model):
-    """评论"""
-    __tablename__ = 'comments'
-    __table_args__ = {'mysql_engine': 'InnoDB'}  # 支持事务操作和外键
-
-    id = db.Column(db.String(32), primary_key=True)
-    username = db.Column(db.String(32), db.ForeignKey('users.id'), nullable=False, doc='手机号码')
-    storeId = db.Column(db.String(32), db.ForeignKey('stores.id'), nullable=False)
-    content = db.Column(db.Text, nullable=False, doc='评论内容')
-    rating = db.Column(db.SmallInteger, nullable=False, doc='店铺评分')
+# class Coupon(db.Model):
+#     """优惠券"""
+#     __tablename__ = 'coupons'
+#     __table_args__ = {'mysql_engine': 'InnoDB'}  # 支持事务操作和外键
+#
+#     id = db.Column(db.String(32), primary_key=True)
+#     discount = db.Column(db.SmallInteger, doc='折扣', nullable=False, default=5)
+#     condition = db.Column(db.SmallInteger, doc='满多少元可用', default=30, nullable=False)
+#     username = db.Column(db.String(32), db.ForeignKey('users.id'), nullable=False, doc='手机号码')
+#     expiredTime = db.Column(db.Date, doc='过期时间', nullable=False)
+#     status = db.Column(db.Boolean, doc='状态(0:未使用,1:已使用)', default=0, nullable=False)
+#
+#
+# class Favorite(db.Model):
+#     """收藏"""
+#     __tablename__ = 'favorites'
+#     __table_args__ = {'mysql_engine': 'InnoDB'}  # 支持事务操作和外键
+#
+#     id = db.Column(db.String(32), primary_key=True)
+#     username = db.Column(db.String(32), db.ForeignKey('users.id'), nullable=False, doc='手机号码')
+#     storeId = db.Column(db.String(32), db.ForeignKey('stores.id'), nullable=False)
+#
+#
+# class Comment(db.Model):
+#     """评论"""
+#     __tablename__ = 'comments'
+#     __table_args__ = {'mysql_engine': 'InnoDB'}  # 支持事务操作和外键
+#
+#     id = db.Column(db.String(32), primary_key=True)
+#     username = db.Column(db.String(32), db.ForeignKey('users.id'), nullable=False, doc='手机号码')
+#     storeId = db.Column(db.String(32), db.ForeignKey('stores.id'), nullable=False)
+#     content = db.Column(db.Text, nullable=False, doc='评论内容')
+#     rating = db.Column(db.SmallInteger, nullable=False, doc='店铺评分')

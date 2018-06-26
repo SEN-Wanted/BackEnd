@@ -21,6 +21,8 @@ def order_info_brief(userID):
     if not valid_user_id(userID):
         return jsonify({'status_code': '401', 'error_message': 'No User'})
     if request.method == 'GET':
+        if Order.query.filter_by(username= userID).first() is None:
+            return jsonify({'status_code': '401', 'error_message': 'No Order'})
         orders_by_user_id = Order.query.filter_by(username= userID).all()
         orders_by_user_id_str = convert_to_json_string(orders_by_user_id)
         orders_by_user_id_dict = json.loads(orders_by_user_id_str)
@@ -38,24 +40,22 @@ def order_info_brief(userID):
         order_str = request.get_data()
         if order_str is None:
             return jsonify({'status_code': '400', 'error_message': 'INVALID REQUEST'})
-        print order_str
         order_dict = json.loads(order_str)
         foods_dict = order_dict['foodList']
-        # now_time = datetime.datetime.now()
-        id_hash = hashlib.md5(order_dict['date']+userID)
-        for food in foods_dict:
-            new_food = food_list(id=hashlib.md5(order_dict['date']+userID+order_dict['storeName']),
-                                 dishName=food['name'],number=food['number'],price=food['price'],orderID=id_hash)
-            db.session.add(new_food)
-        new_order = Order(id=id_hash,username=userID,storeName=order_dict['storeName'],createTime=order_dict['date'],
-                          mealFee=order_dict['mealFee'],ServiceFee=order_dict['ServiceFee'],payPrice=order_dict['Offer'],
-                          totalFee=order_dict['totalPrice'],paymentMethod=order_dict['paymentMethod'])
+        new_order = Order(username=userID, storeName=order_dict['storeName'], createTime=order_dict['date'],
+                          mealFee=order_dict['mealFee'], ServiceFee=order_dict['ServiceFee'],
+                          payPrice=order_dict['Offer'],
+                          totalPrice=order_dict['totalFee'], paymengtMethod=order_dict['paymentMethod'])
         db.session.add(new_order)
         db.session.commit()
+        for food in foods_dict:
+            new_food = food_list(dishName=food['name'], number=food['number'], price=food['price'], orderID=new_order.id)
+            db.session.add(new_food)
+            db.session.commit()
         return jsonify({'status_code':'201'})
 def valid_user_id(userID):
     if userID is None:
         return False
-    if Order.query.filter_by(username= userID).first() is None:
+    if User.query.filter_by(id= userID).first() is None:
         return False
     return True
