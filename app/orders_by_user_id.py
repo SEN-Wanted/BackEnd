@@ -1,7 +1,9 @@
 # -*- coding: UTF-8 -*-
 from .models import *
 from flask import Blueprint, request, jsonify
-import json
+from . import convert_to_json_string
+from . import db
+import datetime, json, hashlib
 
 orders_by_user_id = Blueprint('orders_by_user_id', __name__)
 
@@ -12,40 +14,48 @@ def order_info_brief(userID):
     用户订单详情
     用户身份确认后输出订单详细信息,失败返回（401）
     '''
-    token = request.headers['accesstoken']
-    user = User.verify_auth_token(token)
-    if not user:
-        return jsonify({'status_code': '401', 'error_message': 'Unauthorized'})
+    # token = request.headers['accesstoken']
+    # user = User.verify_auth_token(token)
+    # if not user:
+    #     return jsonify({'status_code': '401', 'error_message': 'Unauthorized'})
+    if not valid_user_id(userID):
+        return jsonify({'status_code': '401', 'error_message': 'No User'})
     if request.method == 'GET':
-        json_od_dict = {
-            "status_code": "201",
-            "orderList": [
-                {
-                    "orderID": 1,
-                    "storeName": "海底捞(珠影星光店)",
-                    "isEvaluate": 1,
-                    "evaluationGrade": 0,
-                    "date": "2017-01-08 17:05:24",
-                    "cost": 10
-                },
-                {
-                    "orderID": 2,
-                    "storeName": "海底捞(珠影星光店)",
-                    "isEvaluate": 1,
-                    "evaluationGrade": 0,
-                    "date": "2017-02-08 17:05:24",
-                    "cost": 10
-                }
-            ]
-        }
-
-        json_order_data = jsonify(json_od_dict)
-        return json_order_data
+        orders_by_user_id = Order.query.filter_by(username= userID).all()
+        orders_by_user_id_str = convert_to_json_string(orders_by_user_id)
+        orders_by_user_id_dict = json.loads(orders_by_user_id_str)
+        orders_tuple = []
+        for order in orders_by_user_id_dict:
+            orders_dict = {}
+            orders_dict['orderID']=order['id']
+            orders_dict['storeName']=order['storeName']
+            orders_dict['rating']=order['rating']
+            orders_dict['date']=order['createTime']
+            orders_dict['cost']=order['payPrice']
+            orders_tuple.append(orders_dict)
+        return jsonify({'status_code':'200','orderList':orders_tuple})
     if request.method == 'POST':
-        path = './json_test/' + userID + '_brief_order.json'
-        new_order = request.get_data()
-        json_od = open(path, 'r')
-        print new_order
-        new_order = jsonify(new_order)
-
-        return new_order
+        order_str = request.get_data()
+        if order_str is None:
+            return jsonify({'status_code': '400', 'error_message': 'INVALID REQUEST'})
+        print order_str
+        order_dict = json.loads(order_str)
+        foods_dict = order_dict['foodList']
+        # now_time = datetime.datetime.now()
+        id_hash = hashlib.md5(order_dict['date']+userID)
+        for food in foods_dict:
+            new_food = food_list(id=hashlib.md5(order_dict['date']+userID+order_dict['storeName']),
+                                 dishName=food['name'],number=food['number'],price=food['price'],orderID=id_hash)
+            db.session.add(new_food)
+        new_order = Order(id=id_hash,username=userID,storeName=order_dict['storeName'],createTime=order_dict['date'],
+                          mealFee=order_dict['mealFee'],ServiceFee=order_dict['ServiceFee'],payPrice=order_dict['Offer'],
+                          totalFee=order_dict['totalPrice'],paymentMethod=order_dict['paymentMethod'])
+        db.session.add(new_order)
+        db.session.commit()
+        return jsonify({'status_code':'201'})
+def valid_user_id(userID):
+    if userID is None:
+        return False
+    if Order.query.filter_by(username= userID).first() is None:
+        return False
+    return True

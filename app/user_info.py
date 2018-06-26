@@ -28,11 +28,9 @@ def sign():
     username = request.form.get('username')
     password = request.form.get('password')
 
-    user_info1 = User.query.filter_by(id = username).first()
-
     if valid_sign_up(username, password):
         # default user
-        user1 = User(id = username, nickname= username, password_hash = password, payPassword = password, money = 0, isAdmin = 0)
+        user1 = User(id=username, password_hash = password, payPassword = password, money = 0, isAdmin = 0)
         user1.hash_password(password)
         db.session.add(user1)
         db.session.commit()
@@ -64,4 +62,3 @@ def valid_sign_up(username, password):
     if User.query.filter_by(id=username).first() is not None:
         return False
     return True
-

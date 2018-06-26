@@ -15,8 +15,9 @@ def send_store():
     '''
     store_data_temp = []
     for store_info1 in Store.query.order_by(Store.id):
+        print store_info1.storeName
         store_data1 = {
-            'icon': '/static/image/store_img/' + store_info1.storeName + '/LOGO.jpg',
+            'icon': '/static/images/store_img/store_id' + store_info1.id + '/store.png',
             'storeName': store_info1.storeName,
             'storeID': store_info1.id,
             'starRating': store_info1.rating,

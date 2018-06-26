@@ -9,4 +9,4 @@ if __name__ == '__main__':
     # if not os.path.exists('db.sqlite'):
     #     db.create_all()
     app.run(debug=True, host='0.0.0.0')
-    # app.run(debug=True)8fafda
+    # app.run(debug=True)

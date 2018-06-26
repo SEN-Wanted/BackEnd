@@ -1,12 +1,12 @@
 {
-    "status_code" :201,
-    "storeName": "海底捞",
-    "foodList": [],
-    "mealFee": 10,
-    "ServiceFee" :10,
-    "totalFee" : 10,
-    "Offer": 10,
-    "paymentMethod" : 1,
-    "Date":"2017-01-08 17:05:24",
-    "orderNumber" : "1829e763476993829"
+    'status_code' :201,
+    'storeName': '海底捞',
+    'foodList': [],
+    'mealFee': 10,
+    'ServiceFee' :10,
+    'totalFee' : 10,
+    'Offer': 10,
+    'paymentMethod' : 1,
+    'date':'2017-01-08 17:05:24',
+    'orderNumber' : '1829e763476993829'
 }

@@ -11,8 +11,8 @@ class User(db.Model):
     """用户"""
     __tablename__ = 'users'
     __table_args__ = {'mysql_engine': 'InnoDB'}  # 支持事务操作和外键
-    id = db.Column(db.String(32), doc='手机号码', primary_key=True)
-    nickname = db.Column(db.String(20), doc='昵称', default='Wanted User', nullable=False, unique=True)
+    id = db.Column(db.Integer, primary_key=True)
+    nickname = db.Column(db.String(20), doc='昵称', default='Wanted User', nullable=False)
     password_hash = db.Column(db.String(128), doc='密码', nullable=False)
     payPassword = db.Column(db.String(32), doc='支付密码', nullable=False)
     money = db.Column(db.Float, doc='账户余额', default=50, nullable=False)
@@ -53,13 +53,17 @@ class Store(db.Model):
     __table_args__ = {'mysql_engine': 'InnoDB'}  # 支持事务操作和外键
     id = db.Column(db.String(32), primary_key=True)
     storeName = db.Column(db.String(32), doc='店铺名称', nullable=False, unique=True)
-    location = db.Column(db.String(32), doc='位置', nullable=False)
+    distance = db.Column(db.Float, doc='距离km', nullable=False)
+    monthlySale = db.Column(db.String(32), doc='月售', nullable=False)
+    price = db.Column(db.Float, doc='人均价格', nullable=False)
     isDiscount = db.Column(db.Boolean, doc='店铺名称', nullable=True)
+    discountNumber = db.Column(db.Float, doc='折扣', nullable=True)
     description = db.Column(db.Text, doc='店铺介绍', default='暂无介绍', nullable=False)
     rating = db.Column(db.Float, doc='评分', nullable=True)
     ratingNum = db.Column(db.SmallInteger, doc='评分人数', default=0)
-    title = db.Column(db.String(32), doc='类别', nullable=False)
-    #    img = db.Column(db.String(40), doc='店铺头像路径')
+    isAppOffer = db.Column(db.Boolean, doc='是否app专享', nullable=True)
+    title = db.Column(db.String(32), doc='种类', nullable=False)
+    img = db.Column(db.String(40), doc='店铺头像路径')
 
     recommends = db.relationship('Recommend', backref='stores', cascade='all', lazy='dynamic')
     dishes = db.relationship('Dishes', backref='stores', cascade='all', lazy='dynamic')
@@ -72,14 +76,13 @@ class Dishes(db.Model):
     __tablename__ = 'dishes'
     __table_args__ = {'mysql_engine': 'InnoDB'}  # 支持事务操作和外键
     id = db.Column(db.String(32), primary_key=True)
-    dishName = db.Column(db.Integer, doc='菜名', nullable=False)
+    dishName = db.Column(db.String(32), doc='菜名', nullable=False)
     dishPrice = db.Column(db.Float, doc='价格', nullable=False)
-    monthlySale = db.Column(db.Integer, doc = '月售', nullable=False)
-    like = db.Column(db.Integer, doc = '点赞', nullable=False)
-    title = db.Column(db.String(32), doc = '分类', nullable=False)
+    monthlySale = db.Column(db.Integer, doc='月售', nullable=False)
     storeId = db.Column(db.String(32), db.ForeignKey('stores.id'), nullable=False)
+    img = db.Column(db.String(40), doc='店铺头像')
 
-    orders = db.relationship('Order', backref='dishes', cascade='all', lazy='dynamic')
+    # orders = db.relationship('Order', backref='dishes', cascade='all', lazy='dynamic')
 
 
 class Recommend(db.Model):
@@ -94,13 +97,30 @@ class Order(db.Model):
     __table_args__ = {'mysql_engine': 'InnoDB'}  # 支持事务操作和外键
 
     id = db.Column(db.String(32), primary_key=True)
-    dishesId = db.Column(db.String(32), db.ForeignKey('dishes.id'), nullable=False)
+#   dishesId = db.Column(db.String(32), db.ForeignKey('dishes.id'), nullable=False)
     username = db.Column(db.String(32), db.ForeignKey('users.id'), nullable=False)
+    storeName = db.Column(db.String(32), doc='店铺名', nullable=False)
     createTime = db.Column(db.DateTime, doc='创建时间', nullable=False)
-    status = db.Column(db.Boolean, doc='订单状态(0:未支付,1:已支付)', default=0, nullable=False)
-    couponId = db.Column(db.String(32), db.ForeignKey('coupons.id'))
+    # status = db.Column(db.Boolean, doc='订单状态(0:未支付,1:已支付)', default=0, nullable=False)
+    # couponId = db.Column(db.String(32), db.ForeignKey('coupons.id'))
+    mealFee = db.Column(db.Float, doc='饭钱', nullable=False)
+    ServiceFee = db.Column(db.Float, doc='服务费', nullable=False)
     payPrice = db.Column(db.Float, doc='实际支付', nullable=False)
     totalPrice = db.Column(db.Float, doc='原价', nullable=False)
+    paymengtMethod = db.Column(db.Integer, doc='支付方式', nullable=False)
+    rating = db.Column(db.Float, doc='评分', default=0, nullable=True)
+
+
+class food_list(db.Model):
+    """订单"""
+    __tablename__ = 'food_list'
+    __table_args__ = {'mysql_engine': 'InnoDB'}  # 支持事务操作和外键
+    id = db.Column(db.String(32), primary_key=True)
+#   dishId = db.Column(db.String(32), db.ForeignKey('dishes.id'), nullable=False)
+    dishName = db.Column(db.String(32), doc='菜名', nullable=False)
+    number = db.Column(db.Integer, doc='数量', nullable=False)
+    price = db.Column(db.Float, doc='价格', nullable=False)
+    orderID = db.Column(db.String(32), db.ForeignKey('orders.id'), nullable=False)
 
 
 class Coupon(db.Model):
@@ -136,6 +156,3 @@ class Comment(db.Model):
     storeId = db.Column(db.String(32), db.ForeignKey('stores.id'), nullable=False)
     content = db.Column(db.Text, nullable=False, doc='评论内容')
     rating = db.Column(db.SmallInteger, nullable=False, doc='店铺评分')
-
-
-

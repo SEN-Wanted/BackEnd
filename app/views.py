@@ -5,13 +5,6 @@ from flask_cors import CORS
 from . import auth
 from models import *
 import hashlib
-import json
-import os
-from flask_sqlalchemy import SQLAlchemy
-from flask_httpauth import HTTPBasicAuth
-from passlib.apps import custom_app_context as pwd_context
-from itsdangerous import (TimedJSONWebSignatureSerializer
-                          as Serializer, BadSignature, SignatureExpired)
 from store_info import store_info
 from user_info import user_info
 from order_info import order_info

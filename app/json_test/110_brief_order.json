@@ -4,7 +4,6 @@
         {
             "orderID": 1,
             "storeName": "海底捞(珠影星光店)",
-            "isEvaluate":1,
             "evaluationGrade":0,
             "date": "2017-01-08 17:05:24",
             "cost": 10
@@ -12,7 +11,6 @@
         {
             "orderID": 2,
             "storeName": "海底捞(珠影星光店)",
-            "isEvaluate":1,
             "evaluationGrade":0,
             "date": "2017-02-08 17:05:24",
             "cost": 10
