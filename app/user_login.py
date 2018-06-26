@@ -47,4 +47,7 @@ def sign():
         }
         json_user_data = jsonify(user_data)
         return json_user_data
+    else:
+        error = jsonify({'status_code': '400', 'error_message': 'INVALID REQUEST'})
+        return error
 

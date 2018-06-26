@@ -17,14 +17,28 @@ def order_info_brief(userID):
     if not user:
         return jsonify({'status_code': '401', 'error_message': 'Unauthorized'})
     if request.method == 'GET':
-        path = './json_test/' + userID + '_brief_order.json'
-        try:
-            print path
-            json_od = open(path, 'r')
-        except IOError:
-            print "fault"
-            return jsonify({'status_code': '401', 'error_message': 'OrderData File Not Found'})
-        json_od_dict = json.load(json_od)
+        json_od_dict = {
+            "status_code": "201",
+            "orderList": [
+                {
+                    "orderID": 1,
+                    "storeName": "海底捞(珠影星光店)",
+                    "isEvaluate": 1,
+                    "evaluationGrade": 0,
+                    "date": "2017-01-08 17:05:24",
+                    "cost": 10
+                },
+                {
+                    "orderID": 2,
+                    "storeName": "海底捞(珠影星光店)",
+                    "isEvaluate": 1,
+                    "evaluationGrade": 0,
+                    "date": "2017-02-08 17:05:24",
+                    "cost": 10
+                }
+            ]
+        }
+
         json_order_data = jsonify(json_od_dict)
         return json_order_data
     if request.method == 'POST':

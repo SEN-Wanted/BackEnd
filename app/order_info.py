@@ -2,7 +2,7 @@
 from flask import Blueprint, render_template, redirect, request, jsonify
 import hashlib
 from . import db
-from .models import Order, Dishes, Store
+from .models import Order, Dishes, Store, User
 
 order_info = Blueprint('order', __name__)
 
@@ -13,6 +13,10 @@ def order_info_detail(userID, orderID):
     订单详情api
     用户身份和订单信息确认后输出订单详细信息,失败返回（401）
     '''
+    token = request.headers['accesstoken']
+    user = User.verify_auth_token(token)
+    if not user:
+        return jsonify({'status_code': '401', 'error_message': 'Unauthorized'})
     listFood = []
     if request.method == 'GET':
         if vaild_order(userID, orderID):

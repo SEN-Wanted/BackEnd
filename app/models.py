@@ -58,7 +58,8 @@ class Store(db.Model):
     description = db.Column(db.Text, doc='店铺介绍', default='暂无介绍', nullable=False)
     rating = db.Column(db.Float, doc='评分', nullable=True)
     ratingNum = db.Column(db.SmallInteger, doc='评分人数', default=0)
-#    img = db.Column(db.String(40), doc='店铺头像路径')
+    title = db.Column(db.String(32), doc='类别', nullable=False)
+    #    img = db.Column(db.String(40), doc='店铺头像路径')
 
     recommends = db.relationship('Recommend', backref='stores', cascade='all', lazy='dynamic')
     dishes = db.relationship('Dishes', backref='stores', cascade='all', lazy='dynamic')

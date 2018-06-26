@@ -1,8 +1,8 @@
 # -*- coding: UTF-8 -*-
+import json
 from .models import *
 from flask import Blueprint, request, jsonify
-import json
-
+from . import convert_to_json_string
 type_search = Blueprint('type_search', __name__)
 
 @type_search.route("/search")
@@ -13,13 +13,9 @@ def search():
     带参数传入/search?type=dessert
     '''
     type = request.args.get('type')
-    path = 'json_test/' + type + '.json'
-    try:
-        print path
-        json_fd = open(path, 'r')
-    except IOError:
-        return jsonify({'status_code': '401', 'error_message': '404 Not Found'})
-        # return "{'status_code':'401','error_message':'404 Not Found'}"
-    json_store = json.load(json_fd)
-    # json_store_str = json.dumps(json_store, ensure_ascii=False, indent=4, sort_keys=True, separators=(',', ': '))
-    return jsonify(json_store)
+    stores = Store.query.filter_by(title=type).all()
+    if type is None or stores is None:
+        error = jsonify({'status_code': '400', 'error_message': 'INVALID REQUEST'})
+        return error
+    else:
+        return jsonify({'status_code':'200', 'ListStoreData':convert_to_json_string(stores)})

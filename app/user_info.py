@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from flask import Blueprint, render_template, redirect, request, jsonify, g
+from flask import Blueprint, request, jsonify, g
 from . import db, auth
 from .models import User
 user_info = Blueprint('user',__name__)
