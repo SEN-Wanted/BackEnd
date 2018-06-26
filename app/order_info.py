@@ -2,7 +2,7 @@
 from flask import Blueprint, render_template, redirect, request, jsonify
 import hashlib
 from . import db
-from .models import Order, Dishes, Store, User
+from .models import Order, Dishes, Store, User, food_list
 
 order_info = Blueprint('order', __name__)
 
@@ -13,79 +13,51 @@ def order_info_detail(userID, orderID):
     订单详情api
     用户身份和订单信息确认后输出订单详细信息,失败返回（401）
     '''
-<<<<<<< HEAD
-    token = request.headers['accesstoken']
-    user = User.verify_auth_token(token)
-    if not user:
-        return jsonify({'status_code': '403', 'error_message': 'Forbidden'})
-=======
 #    token = request.headers['accesstoken']
 #    user = User.verify_auth_token(token)
 #    if not user:
-#        return jsonify({'status_code': '401', 'error_message': 'Unauthorized'})
+#        return jsonify({'status_code': '403', 'error_message': 'Forbidden'})
 
     rating = request.form.get('rating')
     
-    rating = 0
+    # test initial
+    rating = 1
 
->>>>>>> fedcafd1acefb2040e7101c5388cb7fa0ab59259
     listFood = []
     if request.method == 'GET':
         if vaild_order(userID, orderID):
-            for per_user_order in Order.query.order_by(Order.id):
-                if (per_user_order.id == orderID):
-                    # 由于数据库中没有rating这个数据，测试时暂时把status看作rating测试
-                    per_user_order.status = rating
-                    db.session.commit()
-                    dishes = Dishes.query.filter_by(id = per_user_order.dishesId).first()
-                    store_name = Store.query.filter_by(id = dishes.storeId).first().store_name
-                    Food_detail = {
-                        "dishName": dishes.dishName,
-                        "price": dishes.dishPrice,
-                        "number": 'undefined'
-                    }
-                    listFood.append(Food_detail)
-<<<<<<< HEAD
-                else:
-                    return jsonify({'status_code': '401', 'error_message': 'No Orders'})
-            status_code = '201'
-            order_hash = hashlib.md5(orderID)
-            order_detail = {
-                'status_code': status_code,
-                'storeName': store_name,
-                'foodList': listFood,
-                'mealFee': 'undefined',
-                'ServiceFee': 'undefined',
-                'totalFee': per_user_order.totalPrice,
-                'Offer': 'undefined',
-                'paymentMethod': 'undefined',
-                'Date': per_user_order.createTime,
-                'orderNumber': order_hash.hexdigest()
-            }
-            json_order_data = jsonify(order_detail)
-            return json_order_data
-=======
-            if store_name == "":
-                return jsonify({'status_code': '401', 'error_message': 'No Orders'})
+            for per_user_order in food_list.query.filter_by(orderID = orderID):
+                Food_detail = {
+                    'dishName': per_user_order.dishName,
+                    'price': per_user_order.price,
+                    'number': per_user_order.number
+                }
+                listFood.append(Food_detail)
+            print listFood
+            if listFood == []:
+                return jsonify({'status_code': '401', 'error_message': 'No Order'})
             else:
                 status_code = '201'
                 order_hash = hashlib.md5(orderID)
+                user_order = Order.query.filter_by(id = orderID).first()
+                user_order.rating = rating
+                db.session.commit()
+
                 order_detail = {
                     'status_code': status_code,
-                    'storeName': store_name,
+                    'storeName': user_order.storeName,
                     'foodList': listFood,
-                    'mealFee': 'undefined',
-                    'ServiceFee': 'undefined',
-                    'totalFee': per_user_order.totalPrice,
+                    'mealFee': user_order.mealFee,
+                    'ServiceFee': user_order.ServiceFee,
+                    'totalFee': user_order.totalPrice,
                     'Offer': 'undefined',
-                    'paymentMethod': 'undefined',
-                    'Date': per_user_order.createTime,
+                    'paymentMethod': user_order.paymengtMethod,
+                    'Date': user_order.createTime,
                     'orderNumber': order_hash.hexdigest(),
-                    'rating' : rating
+                    'rating' : user_order.rating
                 }
                 json_order_data = jsonify(order_detail)
                 return json_order_data
->>>>>>> fedcafd1acefb2040e7101c5388cb7fa0ab59259
         else:
             return jsonify({'status_code': '401', 'error_message': 'No User'})
 
