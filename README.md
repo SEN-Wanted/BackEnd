@@ -17,7 +17,6 @@ Appserver/
 │   ├── type_search.py # blueprint
 │   ├── user_login.py # blueprint
 │   ├── models.py # 数据格式
-│   ├── createdb.py # 创建数据库
 │   └── view.py # 调用blueprint
 ├── config.py    # 配置文件
 ├── run.py # 主程序文件
