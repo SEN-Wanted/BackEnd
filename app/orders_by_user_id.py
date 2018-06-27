@@ -43,7 +43,7 @@ def order_info_brief(userID):
         order_dict = json.loads(order_str)
         foods_dict = order_dict['foodList']
         user = User.query.filter_by(phone=userID).first()
-        new_order = Order(userId=user.id, storeName=order_dict['storeName'], createTime=order_dict['date'],mealFee=order_dict['mealFee'], ServiceFee=order_dict['serviceFee'],payPrice=order_dict['offer'],totalPrice=order_dict['totalFee'], paymengtMethod=order_dict['paymentMethod'])
+        new_order = Order(userId=user.phone, storeName=order_dict['storeName'], createTime=order_dict['date'],mealFee=order_dict['mealFee'], ServiceFee=order_dict['serviceFee'],payPrice=order_dict['offer'],totalPrice=order_dict['totalFee'], paymengtMethod=order_dict['paymentMethod'])
         db.session.add(new_order)
         db.session.commit()
         for food in foods_dict:
