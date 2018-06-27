@@ -31,4 +31,4 @@ class AlchemyEncoder(json.JSONEncoder):
 def convert_to_json_string(data):
     return json.dumps(data, ensure_ascii=False, cls=AlchemyEncoder)
 
-from . import models,views,store_info,user_info,order_info,user_login,type_search,store_by_id,orders_by_user_id
+from . import models,views,store_info,user_info,order_info,user_login,search_store,store_by_id,orders_by_user_id

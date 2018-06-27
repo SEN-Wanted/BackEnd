@@ -10,10 +10,9 @@ from user_info import user_info
 from order_info import order_info
 
 from user_login import user_login
-from type_search import type_search
+from search_store import search_store
 from store_by_id import store_by_id
 from orders_by_user_id import orders_by_user_id
-
 # extensions
 
 app.register_blueprint(store_info)
@@ -21,7 +20,7 @@ app.register_blueprint(user_info)
 app.register_blueprint(order_info)
 
 app.register_blueprint(user_login)
-app.register_blueprint(type_search)
+app.register_blueprint(search_store)
 app.register_blueprint(store_by_id)
 app.register_blueprint(orders_by_user_id)
 
