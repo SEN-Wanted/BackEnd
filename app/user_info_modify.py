@@ -21,12 +21,14 @@ def verify_password(username_or_token, password):
 def sign():
     error = None
     if request.method == 'POST':
-        username = request.args.get('username')
-        phone_number = request.args.get('phone_number')
-        old_password = request.args.get('old_password')
-        new_password = request.args.get('new_password')
-        if verify_password(username, old_password):
-            # 号码以及密码验证通过
+        username = request.form.get('username')
+        phone_number = request.form.get('phone_num')
+        old_password = request.form.get('old_password')
+        new_password = request.form.get('new_password')
+        print username, phone_number, old_password,new_password
+        if phone_number is None or old_password is None:
+            return jsonify({'status_code':'401','error_message':'Unauthorized'})
+        if verify_password(phone_number, old_password):
             user1=User.query.filter_by(phone=phone_number).first()
             user1.nickname = username
             user1.hash_password(new_password)

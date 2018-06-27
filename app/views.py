@@ -13,6 +13,7 @@ from user_login import user_login
 from search_store import search_store
 from store_by_id import store_by_id
 from orders_by_user_id import orders_by_user_id
+from user_info_modify import user_info_modify
 # extensions
 
 app.register_blueprint(store_info)
@@ -23,6 +24,7 @@ app.register_blueprint(user_login)
 app.register_blueprint(search_store)
 app.register_blueprint(store_by_id)
 app.register_blueprint(orders_by_user_id)
+app.register_blueprint(user_info_modify)
 
 @auth.verify_password
 def verify_password(username_or_token, password):
