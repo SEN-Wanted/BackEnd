@@ -6,13 +6,11 @@ from passlib.apps import custom_app_context as pwd_context
 from itsdangerous import (TimedJSONWebSignatureSerializer
                           as Serializer, BadSignature, SignatureExpired)
 
-
 class User(db.Model):
     """用户"""
     __tablename__ = 'users'
     __table_args__ = {'mysql_engine': 'InnoDB'}  # 支持事务操作和外键
     id = db.Column(db.Integer, primary_key=True)
-    # id = db.Column(db.String(32), primary_key=True)
     phone = db.Column(db.String(20), doc='手机号码', nullable=False, unique=True)
     nickname = db.Column(db.String(20), doc='昵称', default='Wanted User', nullable=False)
     password_hash = db.Column(db.String(128), doc='密码', nullable=False)
@@ -124,7 +122,7 @@ class food_list(db.Model):
     dishName = db.Column(db.String(32), doc='菜名', nullable=False)
     number = db.Column(db.Integer, doc='数量', nullable=False)
     price = db.Column(db.Float, doc='价格', nullable=False)
-    orderID = db.Column(db.String(32), db.ForeignKey('orders.id'), nullable=False)
+    orderID = db.Column(db.Integer, db.ForeignKey('orders.id'), nullable=False)
 
 # class Coupon(db.Model):
 #     """优惠券"""
