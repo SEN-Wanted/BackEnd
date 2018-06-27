@@ -11,8 +11,9 @@ class User(db.Model):
     """用户"""
     __tablename__ = 'users'
     __table_args__ = {'mysql_engine': 'InnoDB'}  # 支持事务操作和外键
-    # id = db.Column(db.Integer, primary_key=True)
-    id = db.Column(db.String(32), primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
+    # id = db.Column(db.String(32), primary_key=True)
+    phone = db.Column(db.String(20), doc='手机号码', nullable=False, unique=True)
     nickname = db.Column(db.String(20), doc='昵称', default='Wanted User', nullable=False)
     password_hash = db.Column(db.String(128), doc='密码', nullable=False)
     payPassword = db.Column(db.String(32), doc='支付密码', nullable=False)
@@ -53,7 +54,7 @@ class Store(db.Model):
     __tablename__ = 'stores'
     __table_args__ = {'mysql_engine': 'InnoDB'}  # 支持事务操作和外键
     id = db.Column(db.String(32), primary_key=True)
-    storeName = db.Column(db.String(32), doc='店铺名称', nullable=False, unique=True)
+    storeName = db.Column(db.String(32), doc='店铺名称', nullable=False)
     distance = db.Column(db.Float, doc='距离km', nullable=False)
     monthlySale = db.Column(db.String(32), doc='月售', nullable=False)
     price = db.Column(db.Float, doc='人均价格', nullable=False)
@@ -81,6 +82,7 @@ class Dishes(db.Model):
     dishName = db.Column(db.String(32), doc='菜名', nullable=False)
     dishPrice = db.Column(db.Float, doc='价格', nullable=False)
     monthlySale = db.Column(db.Integer, doc='月售', nullable=False)
+    title = db.Column(db.String(32), doc='种类', nullable=False)
     storeId = db.Column(db.String(32), db.ForeignKey('stores.id'), nullable=False)
     img = db.Column(db.String(40), doc='店铺头像')
 
@@ -99,7 +101,7 @@ class Order(db.Model):
     # id = db.Column(db.String(128), primary_key=True)
     id = db.Column(db.Integer, primary_key=True)
     #   dishesId = db.Column(db.String(32), db.ForeignKey('dishes.id'), nullable=False)
-    username = db.Column(db.String(32), db.ForeignKey('users.id'), nullable=False)
+    userId = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     storeName = db.Column(db.String(32), doc='店铺名', nullable=False)
     createTime = db.Column(db.DateTime, doc='创建时间', nullable=False)
     # status = db.Column(db.Boolean, doc='订单状态(0:未支付,1:已支付)', default=0, nullable=False)
@@ -118,7 +120,7 @@ class food_list(db.Model):
     __table_args__ = {'mysql_engine': 'InnoDB'}  # 支持事务操作和外键
     # id = db.Column(db.String(128), primary_key=True)
     id = db.Column(db.Integer, primary_key=True)
-#   dishId = db.Column(db.String(32), db.ForeignKey('dishes.id'), nullable=False)
+    # dishId = db.Column(db.String(32), db.ForeignKey('dishes.id'), nullable=False)
     dishName = db.Column(db.String(32), doc='菜名', nullable=False)
     number = db.Column(db.Integer, doc='数量', nullable=False)
     price = db.Column(db.Float, doc='价格', nullable=False)

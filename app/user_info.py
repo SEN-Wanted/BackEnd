@@ -2,6 +2,7 @@
 from flask import Blueprint, request, jsonify, g
 from . import db, auth
 from .models import User
+import hashlib
 user_info = Blueprint('user',__name__)
 
 @auth.verify_password
@@ -10,7 +11,7 @@ def verify_password(username_or_token, password):
     user = User.verify_auth_token(username_or_token)
     if not user:
         # try to authenticate with username/password
-        user = User.query.filter_by(id=username_or_token).first()
+        user = User.query.filter_by(phone=username_or_token).first()
         if not user or not user.verify_password(password):
             return False
     g.user = user
@@ -27,10 +28,9 @@ def sign():
     '''
     username = request.form.get('username')
     password = request.form.get('password')
-
     if valid_sign_up(username, password):
         # default user
-        user1 = User(id = username, password_hash = password, payPassword = password, money = 0, isAdmin = 0)
+        user1 = User(phone=username, password_hash = password, payPassword = password, money = 0, isAdmin = 0)
         user1.hash_password(password)
         db.session.add(user1)
         db.session.commit()
@@ -45,7 +45,8 @@ def sign():
        'token': token,
        'duration': 600,
        "user": {
-           "username": user1.id,
+           "ID": user1.id,
+           "username": user1.phone,
            "name": user1.nickname,
            "avar": '/static/images/user_img/test_user_1.png',
            "message": '这个人很懒什么都没留下',
@@ -58,6 +59,6 @@ def sign():
 def valid_sign_up(username, password):
     if username is None or password is None:
         return False
-    if User.query.filter_by(id=username).first() is not None:
+    if User.query.filter_by(phone=username).first() is not None:
         return False
     return True

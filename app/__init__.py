@@ -29,6 +29,6 @@ class AlchemyEncoder(json.JSONEncoder):
         return json.JSONEncoder.default(self, obj)
 
 def convert_to_json_string(data):
-    return json.dumps(data, cls=AlchemyEncoder, indent=2)
+    return json.dumps(data, ensure_ascii=False, cls=AlchemyEncoder)
 
 from . import models,views,store_info,user_info,order_info,user_login,type_search,store_by_id,orders_by_user_id

@@ -13,8 +13,9 @@ headers = {'accesstoken':token}
 # r = requests.post("http://127.0.0.1:5000/sign_up", data=user_info)
 # r = requests.post("http://127.0.0.1:5000/login", data=user_info)
 # r = requests.get("http://127.0.0.1:5000/search", params=params)
-# r = requests.post("http://127.0.0.1:5000/user/13288463932/orders", data=data, headers=headers)
-r = requests.get("http://127.0.0.1:5000/user/13288463932/orders", headers=headers)
+# r = requests.post("http://127.0.0.1:5000/user/3/orders", data=data, headers=headers)
+# r = requests.get("http://127.0.0.1:5000/user/3/orders", headers=headers)
+r = requests.get("http://127.0.0.1:5000/index/1")
 # r = requests.get("http://127.0.0.1:5000/api/token",auth=(user_info['username'],user_info['password']))
 # r = requests.get("http://127.0.0.1:5000/api/resource",auth=(token, '222'))
 
