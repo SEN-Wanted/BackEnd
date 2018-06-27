@@ -64,6 +64,6 @@ def order_info_detail(userID, orderID):
 def vaild_order(userID, OrderID):
     if userID is None or OrderID is None:
         return False
-    if Order.query.filter_by(username= userID).first() is None:
+    if Order.query.filter_by(userId = userID).first() is None:
         return False
     return True
