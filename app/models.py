@@ -99,7 +99,7 @@ class Order(db.Model):
     # id = db.Column(db.String(128), primary_key=True)
     id = db.Column(db.Integer, primary_key=True)
     #   dishesId = db.Column(db.String(32), db.ForeignKey('dishes.id'), nullable=False)
-    userId = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    userId = db.Column(db.String(20), db.ForeignKey('users.phone'), nullable=False)
     storeName = db.Column(db.String(32), doc='店铺名', nullable=False)
     createTime = db.Column(db.DateTime, doc='创建时间', nullable=False)
     # status = db.Column(db.Boolean, doc='订单状态(0:未支付,1:已支付)', default=0, nullable=False)

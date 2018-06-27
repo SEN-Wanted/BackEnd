@@ -37,7 +37,7 @@ def sign():
             'token': token,
             'duration': 600,
             "user": {
-                "ID": username,
+                "id": username,
                 "username": username,
                 "name": username,
                 "avar": '/static/images/user_img/test_user_1.png',
