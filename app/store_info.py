@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from flask import Blueprint, render_template, redirect, request, jsonify
+from flask import Blueprint, request, jsonify
 from . import db
 from .models import Store
 
