@@ -38,16 +38,16 @@ def sign():
         error = jsonify({'status_code': '401', 'error_message': 'Unauthorized'})
         return error
     verify_password(username, password)
-    token = g.user.generate_auth_token(600)
+    token = g.user.generate_auth_token(6000)
     status_code = "201"
     user_data = {
        'status_code': status_code,
        'token': token,
-       'duration': 600,
+       'duration': 6000,
        "user": {
-           "ID": user1.id,
-           "username": user1.phone,
-           "name": user1.nickname,
+           "id": user1.id,
+           "phone": user1.phone,
+           "nickname": user1.nickname,
            "avar": '/static/images/user_img/test_user_1.png',
            "message": '这个人很懒什么都没留下',
            "orderList": []

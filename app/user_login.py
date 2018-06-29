@@ -30,16 +30,17 @@ def sign():
             # 手机号或者密码错误
             error = jsonify({'status_code':'401','error_message':'Unauthorized'})
             return error
-        token = g.user.generate_auth_token(600)
+        # user = User.query.filter_by(phone=username).first()
+        token = g.user.generate_auth_token(6000)
         status_code = "201"
         user_data = {
             'status_code': status_code,
             'token': token,
-            'duration': 600,
+            'duration': 6000,
             "user": {
-                "id": username,
-                "username": username,
-                "name": username,
+                "id": g.user.id,
+                "phone": g.user.phone,
+                "nickname": g.user.nickname,
                 "avar": '/static/images/user_img/test_user_1.png',
                 "message": '这个人很懒什么都没留下',
                 "orderList": []

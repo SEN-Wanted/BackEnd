@@ -37,12 +37,12 @@ def sign():
             # 手机号或者密码错误
             error = jsonify({'status_code':'401','error_message':'Unauthorized'})
             return error
-        token = g.user.generate_auth_token(600)
+        token = g.user.generate_auth_token(6000)
         status_code = "201"
         user_data = {
             'status_code': status_code,
             'token': token,
-            'duration': 600,
+            'duration': 6000,
             "user": {
                 "id": user1.id,
                 "phone": user1.phone,

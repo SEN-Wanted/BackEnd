@@ -16,13 +16,16 @@ def order_info_detail(userID, orderID):
     token = request.headers['accesstoken']
     user = User.verify_auth_token(token)
     if not user:
-        return jsonify({'status_code': '403', 'error_message': 'Forbidden'})
-    rating_dict = json.loads(request.get_data())
-    rating = rating_dict['rating']
-    print rating
+        return jsonify({'status_code': '401', 'error_message': 'Unauthorized'})
+        # return jsonify({'status_code': '403', 'error_message': 'Forbidden'})
+    str = request.get_data()
+    print str
+    rating = 0
+    if str.strip():
+        rating_dict = json.loads(str,encoding='utf-8')
+        rating = rating_dict['rating']
 #    # test initial
 #    rating = 1
-
     listFood = []
     if vaild_order(userID, orderID):
         for per_user_order in food_list.query.filter_by(orderID = orderID):
@@ -34,16 +37,18 @@ def order_info_detail(userID, orderID):
             listFood.append(Food_detail)
         print listFood
         if listFood == []:
-            return jsonify({'status_code': '401', 'error_message': 'No Order'})
+            return jsonify({'status_code': '200', 'error_message': 'No Order'})
         else:
             status_code = '201'
             order_hash = hashlib.md5(orderID)
             user_order = Order.query.filter_by(id = orderID).first()
             user_order.rating = rating
             db.session.commit()
-
+            storeID = user_order.storeId
+            store = Store.query.filter_by(id=storeID).first()
             order_detail = {
                 'status_code': status_code,
+                'storeIcon': '/static/image/store_img/'+ store.img,
                 'storeName': user_order.storeName,
                 'foodList': listFood,
                 'mealFee': user_order.mealFee,
