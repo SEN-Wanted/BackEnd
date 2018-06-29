@@ -8,7 +8,6 @@ import hashlib
 from store_info import store_info
 from user_info import user_info
 from order_info import order_info
-from message_info import message_info
 
 from user_login import user_login
 from search_store import search_store
@@ -20,7 +19,6 @@ from user_info_modify import user_info_modify
 app.register_blueprint(store_info)
 app.register_blueprint(user_info)
 app.register_blueprint(order_info)
-app.register_blueprint(message_info)
 
 app.register_blueprint(user_login)
 app.register_blueprint(search_store)

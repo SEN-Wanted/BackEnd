@@ -23,20 +23,21 @@ def search():
         print convert_to_json_string(stores)
     if stores is None:
         return jsonify({'status_code': '400', 'error_message': 'No Stores'})
-    ListStoreData = []
-    stores_str=convert_to_json_string(stores)
-    stores_dict = json.loads(stores_str)
-    for store in stores_dict:
-        s_dict = {}
-        s_dict['icon']=store['img']
-        s_dict['storeName']=store['storeName']
-        s_dict['storeid']=store['id']
-        s_dict['starRating']=store['rating']
-        s_dict['price']=store['price']
-        s_dict['monthlySale']=store['monthlySale']
-        s_dict['distance']=store['distance']
-        s_dict['isDiscount']=store['isDiscount']
-        s_dict['discountNumber']=store['discountNumber']
-        s_dict['isAppOffer']=store['isAppOffer']
-        ListStoreData.append(s_dict)
-    return jsonify({'status_code':'200', 'ListStoreData':ListStoreData})
+    else:
+        ListStoreData = []
+        stores_str=convert_to_json_string(stores)
+        stores_dict = json.loads(stores_str)
+        for store in stores_dict:
+            s_dict = {}
+            s_dict['icon']=store['img']
+            s_dict['storeName']=store['storeName']
+            s_dict['storeid']=store['id']
+            s_dict['starRating']=store['rating']
+            s_dict['price']=store['price']
+            s_dict['monthlySale']=store['monthlySale']
+            s_dict['distance']=store['distance']
+            s_dict['isDiscount']=store['isDiscount']
+            s_dict['discountNumber']=store['discountNumber']
+            s_dict['isAppOffer']=store['isAppOffer']
+            ListStoreData.append(s_dict)
+        return jsonify({'status_code':'200', 'ListStoreData':ListStoreData})

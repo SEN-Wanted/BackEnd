@@ -124,24 +124,6 @@ class food_list(db.Model):
     price = db.Column(db.Float, doc='价格', nullable=False)
     orderID = db.Column(db.Integer, db.ForeignKey('orders.id'), nullable=False)
 
-#class conversation(db.Model):
-#    """会话"""
-#    __tablename__ = 'conversation'
-#    __table_args__ = {'mysql_engine': 'InnoDB'}  # 支持事务操作和外键
-#    id = db.Column(db.Integer, primary_key=True)
-#    userId = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-#    storeId = db.Column(db.String(32), db.ForeignKey('stores.id'), nullable=False)
-
-
-# class message(db.Model):
-#     """消息记录"""
-#     __tablename__ = 'message'
-#     __table_args__ = {'mysql_engine': 'InnoDB'}  # 支持事务操作和外键
-#     id = db.Column(db.Integer, primary_key=True)
-#     content = db.Column(db.Text, doc='内容', nullable=False)
-#     time = db.Column(db.DateTime, doc='发送时间', nullable=False)
-#     storeId = db.Column(db.String(32), db.ForeignKey('stores.id'), nullable=False)
-
 # class Coupon(db.Model):
 #     """优惠券"""
 #     __tablename__ = 'coupons'

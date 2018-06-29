@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from flask import Blueprint, render_template, redirect, request, jsonify
-import hashlib
+import hashlib, json
 from . import db
 from .models import Order, Dishes, Store, User, food_list
 
@@ -17,9 +17,9 @@ def order_info_detail(userID, orderID):
     user = User.verify_auth_token(token)
     if not user:
         return jsonify({'status_code': '403', 'error_message': 'Forbidden'})
-
-    rating = request.form.get('rating')
-    
+    rating_dict = json.loads(request.get_data())
+    rating = rating_dict['rating']
+    print rating
 #    # test initial
 #    rating = 1
 
@@ -27,7 +27,7 @@ def order_info_detail(userID, orderID):
     if vaild_order(userID, orderID):
         for per_user_order in food_list.query.filter_by(orderID = orderID):
             Food_detail = {
-                'dishName': per_user_order.dishName,
+                'name': per_user_order.dishName,
                 'price': per_user_order.price,
                 'number': per_user_order.number
             }
@@ -49,9 +49,9 @@ def order_info_detail(userID, orderID):
                 'mealFee': user_order.mealFee,
                 'ServiceFee': user_order.ServiceFee,
                 'totalFee': user_order.totalPrice,
-                'Offer': 'undefined',
+                'offer': 15,
                 'paymentMethod': user_order.paymengtMethod,
-                'Date': user_order.createTime,
+                'date': user_order.createTime.strftime('%Y-%m-%d %H:%M:%S'),
                 'orderNumber': order_hash.hexdigest(),
                 'rating' : user_order.rating
             }

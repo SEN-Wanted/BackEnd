@@ -44,9 +44,9 @@ def sign():
             'token': token,
             'duration': 600,
             "user": {
-                "ID": username,
-                "username": username,
-                "name": username,
+                "id": user1.id,
+                "phone": user1.phone,
+                "nickname": user1.nickname,
                 "avar": '/static/images/user_img/test_user_1.png',
                 "message": '这个人很懒什么都没留下',
                 "orderList": []
