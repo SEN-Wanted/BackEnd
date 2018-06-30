@@ -7,7 +7,6 @@ Appserver/
 ├── app
 │   ├── static/      # 静态资源文件夹
 │   ├── templates/   # 模板文件夹
-│   ├── json_test/   # 用来存放测试文件
 │   ├── __init__.py  # 初始化文件
 │   ├── store_info.py # blueprint
 │   ├── user_info.py # blueprint
