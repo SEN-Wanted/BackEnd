@@ -19,6 +19,8 @@ Appserver/
 │   ├── models.py # 数据格式
 │   └── view.py # 调用blueprint
 ├── config.py    # 配置文件
+├── createdb.py # 创建数据库
+├── client.py # 用户配置文件
 ├── run.py # 主程序文件
 ├── requirements     # 需求文件
 └── README.md
