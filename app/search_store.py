@@ -29,7 +29,7 @@ def search():
         stores_dict = json.loads(stores_str)
         for store in stores_dict:
             s_dict = {}
-            s_dict['icon']=store['img']
+            s_dict['icon']='/static/image/store_img/'+ store['img']
             s_dict['storeName']=store['storeName']
             s_dict['storeid']=store['id']
             s_dict['starRating']=store['rating']

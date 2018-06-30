@@ -36,7 +36,7 @@ def store_info(storeID):
             dish_by_type_dict['name']=dish_by_type['dishName']
             dish_by_type_dict['monthlySale'] = dish_by_type['monthlySale']
             dish_by_type_dict['price'] = dish_by_type['dishPrice']
-            dish_by_type_dict['icon'] = dish_by_type['img']
+            dish_by_type_dict['icon'] = '/static/image/store_img/' + dish_by_type['img']
             foodDataList['data'].append(dish_by_type_dict)
         foodData.append(foodDataList)
     return jsonify({'status_code': '200','foodData':foodData})
