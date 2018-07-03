@@ -119,7 +119,7 @@ class food_list(db.Model):
     __table_args__ = {'mysql_engine': 'InnoDB'}  # 支持事务操作和外键
     # id = db.Column(db.String(128), primary_key=True)
     id = db.Column(db.Integer, primary_key=True)
-    dishId = db.Column(db.String(32), db.ForeignKey('dishes.id'), nullable=False)
+    # dishId = db.Column(db.String(32), db.ForeignKey('dishes.id'), nullable=False)
     dishName = db.Column(db.String(32), doc='菜名', nullable=False)
     number = db.Column(db.Integer, doc='数量', nullable=False)
     price = db.Column(db.Float, doc='价格', nullable=False)
