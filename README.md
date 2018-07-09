@@ -66,7 +66,7 @@ cd Flask-Server/
 python run.py
 ```
 
-**注意：**在运行项目之前需在config.py中配置数据库相关参数
+**注意：** 在运行项目之前需在config.py中配置数据库相关参数
 
 ```
 SQLALCHEMY_DATABASE_URI = 数据库链接
